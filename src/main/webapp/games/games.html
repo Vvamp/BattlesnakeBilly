@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--Deze html file is puur een 'voorbeeld-frontend' en -hoeft- niet aangepast te worden. In principe hoef je alleen-->
+<!--de ...-service.js files in te vullen met de juiste promise-logica en dan zou de UI moeten werken.-->
+<!--Uiteraard -mag- je deze files wel aanpassen, want heel fraai is deze UI nou ook weer niet:)-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Logs</title>
+    <link rel="stylesheet" href="../site.css">
+    <link rel="stylesheet" href="./games.css">
+
+    <link rel="icon" href="../favicon.ico">
+</head>
+<body>
+
+<header>
+    <h1>Mini Snek!</h1>
+    <div class="login">
+        <form name="login">
+            <label>Username: <input type="text" name="username"></label>
+            <label>Password: <input type="password" name="password"></label>
+            <button>Log in</button>
+        </form>
+        <form name="logout">
+            <p>Welcome <span id="user"></span></p>
+            <button>Log out</button>
+        </form>
+        <script src="../login.js" type="module"></script>
+    </div>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="../snake/snake.html">Metadata</a></li>
+        <li><a href="./games.html">Games</a></li>
+    </ul>
+</nav>
+
+<main>
+    <div>
+        <h2>Games</h2>
+        <ul id="games"></ul>
+    </div>
+    <div id="details" class="hidden">
+        <h2>Details</h2>
+        <p>Placeholder, uiteraard hoort dit eigenlijk netjes, maar dan moet dit voorbeeld aannemen hoe jij je JSON format, en dat mag je helemaal zelf weten.
+            Het gaat er om dat je laat zien dat je data van meerdere zetten kan combineren om een 'verslagje' te maken:</p>
+
+
+        <pre>
+
+        </pre>
+    </div>
+
+</main>
+<script type="module" src="games.js"></script>
+</body>
+</html>

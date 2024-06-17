@@ -1,0 +1,88 @@
+/*Deze css file is puur een 'voorbeeld-frontend' en -hoeft- niet aangepast te worden. In principe hoef je alleen*/
+/*de ...-service.js files in te vullen met de juiste promise-logica en dan zou de UI moeten werken.*/
+/*Uiteraard -mag- je deze files wel aanpassen, want heel fraai is deze UI nou ook weer niet:)*/
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #E80987 15%, #3E338F 100%);
+    color: #f0f0f0;
+
+    display: grid;
+    grid-template-areas:
+    "title  title"
+    "menu   body";
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 150px 1fr;
+}
+
+header {
+    grid-area: title;
+    display: flex;
+    align-content: stretch;
+}
+
+header h1 {
+    text-align: center;
+    flex-grow: 1;
+}
+
+nav {
+    height: 100%;
+    grid-area: menu;
+    font-family: sans-serif
+}
+
+nav ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+}
+
+nav a {
+    padding: 10px 0;
+    display: inline-block;
+    width: 80%;
+    margin-left: 20%;
+    color: #f0f0f0;
+}
+
+nav a:hover {
+    background-color: #617182;
+}
+
+main {
+    grid-area: body;
+    background-color: #f0f6ff;
+    color: #617182;
+    padding: 1rem 2rem;
+    border-top-left-radius: 3rem;
+}
+
+.login {
+    width: 300px;
+    border-left: 1px solid #f0f0f0;
+    padding-left: 20px;
+    display: flex;
+}
+
+.login input {
+    display: block;
+    width: 200px;
+}
+
+.login button {
+    float: right;
+}
+
+form[name=logout] {
+    display: none;
+}

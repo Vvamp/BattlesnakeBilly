@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--Deze html file is puur een 'voorbeeld-frontend' en -hoeft- niet aangepast te worden. In principe hoef je alleen-->
+<!--de ...-service.js files in te vullen met de juiste promise-logica en dan zou de UI moeten werken.-->
+<!--Uiteraard -mag- je deze files wel aanpassen, want heel fraai is deze UI nou ook weer niet:)-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metadata</title>
+    <link rel="stylesheet" href="../site.css">
+    <link rel="stylesheet" href="snake.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+<body>
+
+<header>
+    <h1>Mini Snek!</h1>
+    <div class="login">
+        <form name="login">
+            <label>Username: <input type="text" name="username"></label>
+            <label>Password: <input type="password" name="password"></label>
+            <button>Log in</button>
+        </form>
+        <form name="logout">
+            <p>Welcome <span id="user"></span></p>
+            <button>Log out</button>
+        </form>
+        <script src="../login.js" type="module"></script>
+    </div>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="./snake.html">Metadata</a></li>
+        <li><a href="../games/games.html">Games</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h2>Metadata</h2>
+    <form name="snake">
+        <ul>
+            <li><label>Author<input name="author" type="text" disabled="true"></label></li>
+            <li><label>Color<input name="color" type="color"></label></li>
+            <!-- https://play.battlesnake.com/references/customizations/ -->
+            <li><label>Head<select name="head">
+                <option>default</option>
+                <option>beluga</option>
+                <option>evil</option>
+                <option>sand-worm</option>
+                <option>silly</option>
+            </select></label></li>
+            <li><label>Tail<select name="tail">
+                <option>default</option>
+                <option>round-bum</option>
+                <option>small-rattle</option>
+                <option>freckled</option>
+                <option>curled</option>
+            </select></label></li>
+            <li></li>
+        </ul>
+
+        <button id="update-btn">Update</button>
+    </form>
+</main>
+
+<script type="module" src="snake.js"></script>
+</body>
+</html>

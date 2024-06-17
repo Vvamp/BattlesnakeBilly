@@ -1,0 +1,23 @@
+/*Deze css file is puur een 'voorbeeld-frontend' en -hoeft- niet aangepast te worden. In principe hoef je alleen*/
+/*de ...-service.js files in te vullen met de juiste promise-logica en dan zou de UI moeten werken.*/
+/*Uiteraard -mag- je deze files wel aanpassen, want heel fraai is deze UI nou ook weer niet:)*/
+
+main {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+}
+
+.hidden {
+    display: none;
+}
+
+.delete {
+    color: red;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

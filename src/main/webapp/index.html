@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="nl">
+<!--Deze html file is puur een 'voorbeeld-frontend' en -hoeft- niet aangepast te worden. In principe hoef je alleen-->
+<!--de ...-service.js files in te vullen met de juiste promise-logica en dan zou de UI moeten werken.-->
+<!--Uiteraard -mag- je deze files wel aanpassen, want heel fraai is deze UI nou ook weer niet:)-->
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Snek!</title>
+    <link rel="stylesheet" href="site.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<header>
+    <h1>Mini Snek!</h1>
+    <div class="login">
+        <form name="login">
+            <label>Username: <input type="text" name="username"></label>
+            <label>Password: <input type="password" name="password"></label>
+            <button>Log in</button>
+        </form>
+        <form name="logout">
+            <p>Welcome <span id="user"></span></p>
+            <button>Log out</button>
+        </form>
+        <script src="login.js" type="module"></script>
+    </div>
+</header>
+
+
+<nav>
+    <ul>
+        <li><a href="snake/snake.html">Metadata</a></li>
+        <li><a href="games/games.html">Games</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h2>BEP Eindopdracht 2022: Battlesnake!</h2>
+
+    <!-- Onderstaande HTML is een beetje maf, want die is gecopy-paste van de README.md op Github... Lui, maar makkelijk -->
+    <h3>Onderdelen</h3>
+    <p>De opdracht heeft een aantal verplichte onderdelen:</p>
+    <ol>
+        <li>De Battlesnake moet op je eigen account geregistreerd kunnen worden op <a href="https://play.battlesnake.com" rel="nofollow">https://play.battlesnake.com</a>. Hiervoor zul je
+            dus de applicatie echt toegankelijk moeten maken (via bijv. Heroku, Azure, of je eigen slimme idee...) en de
+            <a href="https://docs.battlesnake.com/references/api#the-battlesnake-api" rel="nofollow">Battlesnake API</a> moeten implementeren. Focus je eerst
+            op het GET request. Je zou bijv. in eerste instantie een hard-coded response kunnen teruggeven (wat je in het volgende
+            onderdeel direct moet verbeteren). De documentatie is er niet helemaal duidelijk over, maar je GET request hoeft niet op
+            een 'top-level-url' gehost te worden, je mag je slang prima parkeren op <code>/restservices/bepslang</code> (of iets dergelijks).</li>
+        <li>Het uiterlijk van je slang moet via de snake.html (of vergelijkbare) frontend aangepast kunnen worden. Het is ok om
+            daarna handmatig op het refresh knopje op Battlesnake.com te klikken, dat hoeft, en kan waarschijnlijk ook niet automatisch!.
+            Oftewel, na een aanpassing moet het GET request van onderdeel 1 een nieuw uiterlijk opleveren.</li>
+        <li>Uiteraard moet je ook een potje kunnen spelen! Hiervoor zul je de rest van de
+            <a href="https://docs.battlesnake.com/references/api#the-battlesnake-api" rel="nofollow">Battlesnake API</a> moeten implementeren. Dit houdt in dat
+            je naast dat ene GET request, ook 3 POST-requests moet kunnen ontvangen. Het is hierbij niet van groot belang hoe slim je slang is, maar
+            of je deze requests netjes kunt opvangen en afhandelen. Er staat in <strong>DummyBody.json</strong> een voorbeeldbody voor je klaar zodat
+            je die zo in Postman kan plakken en niet de requests van Battlesnake hoeft te reverse-engineeren.</li>
+        <li>Informatie van gespeelde potjes moet (per potje) inzichtelijk zijn via de games.html (of vergelijkbare) frontend.
+            Welke informatie is niet heel belangrijk (denk bijv. aan 'aantal beurten', 'welke moves zijn er gedaan', etc), het gaat
+            er om dat je makkelijk kan bewijzen dat je alle moves van #3 goed kan opvangen en er data over kan verzamelen.</li>
+        <li>De informatie van een gespeelde potje moet verwijderd kunnen worden (omdat deze bijv. niet interessant was). Hiervoor
+            staat ook al een beginnetje klaar op de games.html pagina (uiteraard staat het je vrij dit te verbeteren)</li>
+        <li>Waar logisch moet een gebruiker eerst inloggen voordat er slangen gewijzigd en gegevens ingezien en/of verwijderd kunnen worden.</li>
+    </ol>
+    <h3 dir="auto">FAQ</h3>
+    <ul dir="auto">
+        <li><em>"Is dit niet eigenlijk een AI opdracht? Ik dacht dat ik SD deed..."</em></li>
+    </ul>
+    <p dir="auto">De details van de domein-logica, dus wat er -achter- je resources gebeurt is inderdaad AI spul. 90% van de eisen van
+        deze opdracht gaan echter over het aanbieden van die logica als een webservice. Je hebt immers al een 'op niveau' voor
+        gedrag te pakken als je slang niet meer als een kamikaze op de muur af stormt:)</p>
+    <ul dir="auto">
+        <li><em>"Is dit niet te moeilijk?"</em></li>
+    </ul>
+    <p dir="auto">Het kan best intimiderend zijn om ineens 'in het wild' te programmeren. Probeer de onderdelen vooral stapje voor stapje
+        te maken. Dan zul je zien dat het wel mee valt. Ga je vooral niet 'gokken wat er mis is', maar ga bijv. op zoek naar extra
+        logs op Heroku om er achter te komen wat er echt aan de hand is.</p>
+    <ul dir="auto">
+        <li><em>"Moet ik echt die hele voorbeeld-JSON kunnen uitlezen?? Heb je wel gezien hoe groot die is?"</em></li>
+    </ul>
+    <p dir="auto">Gelukkig is dat niet nodig. Als je javax.json gebruikt kun je gericht zoeken naar wat je nodig hebt, maar als je Jackson
+        gebruikt kun je door <code>@JsonIgnoreProperties(ignoreUnknown = true)</code> boven je class te plaatsen er voor zorgen dat je
+        alleen hoeft te mappen wat je daadwerkelijk wil gebruiken.</p>
+    <ul dir="auto">
+        <li><em>"Is dit niet te makkelijk?"</em></li>
+    </ul>
+    <p dir="auto">Er liggen zat 'extra uitdagingen' in het verlengde. Probeer bijv. maar eens meerdere verschillende Battlesnakes op 1
+        applicatie te hosten. En misschien kun je zelfs als je er meerdere hebt hybrides configureren.</p>
+    <ul dir="auto">
+        <li><em>"Inloggen is best lastig, maar moet ik dat vanwege onderdeel #5 nu niet als eerste bouwen?"</em></li>
+    </ul>
+    <p dir="auto">Nee, dat valt wel mee. Als alles prima werkt, maar nergens security toegepast is telt dat als een-of-twee kleine
+        tekortkomingen (er is geen security EN het inloggen doet het niet). Inloggen is echt een ideale 'laatste' feature om
+        in deze opdracht te bouwen.</p>
+    <ul dir="auto">
+        <li><em>"Kan ik mijn docent nog om hulp vragen?"</em></li>
+    </ul>
+    <p dir="auto">Tuurlijk! We sturen graag een beetje bij, of wijzen je naar opdrachten uit BEP1 waar 'het truukje' eerder langs is gekomen.
+        We kunnen je alleen niet zoveel helpen als bij de formatieve opdrachten. Probeer vooral 'het probleem dat je hebt', zo
+        goed mogelijk na te bouwen in de formatieve opdrachten, dan kunnen we daar je mee helpen. (klinkt flauw, maar je zult
+        merken dat het nabouwen van je probleem in de formatieve opdracht 95% van de tijd je ook het antwoord al geeft!)</p>
+</main>
+
+</body>
+</html>
