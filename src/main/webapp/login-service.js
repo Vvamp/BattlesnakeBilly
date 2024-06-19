@@ -1,23 +1,74 @@
 export default class LoginService {
     isLoggedIn() {
-        //TODO: hoe ga je bepalen of iemand ingelogd is (geweest)?
-        return false;
+        return window.sessionStorage.getItem("loginToken") != null && window.sessionStorage.getItem("loginToken");
     }
 
     login(user, password) {
-        //TODO: inloggen met POST
-        return Promise.resolve();
+        let body = {user,password};
+        let jsonBody = JSON.stringify(body);
+
+        let fetchoptions = {
+            method: "POST",
+            body: jsonBody,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        return Promise.resolve(fetch("api/user/login", fetchoptions)
+            .then(function(response){
+                if(response.ok) return response.json()
+                else throw "Wrong username and/or password"
+            })
+            .then(result => window.sessionStorage.setItem("loginToken", result.JWT))
+            .catch(error => console.error(error)));
     }
 
     getUser() {
-        //TODO: deze GET method test je token op server-side problemen. Je kunt client-side op zich wel 'ingelogd' zijn
-        //maar het zou altijd zomaar kunnen dat je token verlopen is, of dat er server-side iets anders aan de hand is.
-        //Dus het is handig om te checken met een -echte fetch- of je login-token wel echt bruikbaar is.
-        return Promise.resolve(null);
+        let token = window.sessionStorage.getItem("loginToken");
+        if(!token)
+            return Promise.resolve(false); // no need to check an empty/null token
+
+        let fetchoptions = {
+            method: "GET",
+        }
+        return Promise.resolve(fetch("api/user/validate?token=" + token, fetchoptions)
+            .then(function(response){
+                if(response.ok) return response.json()
+            })
+            .then(function(result){
+                if(result.isValid){
+                    return true;
+                }else{
+                    window.sessionStorage.removeItem("loginToken"); // client-side logout
+                    return false;
+                }
+            })
+            .catch(function(error){
+                console.error(error);
+                return false;
+            }));
+
     }
 
     logout() {
-        //TODO: hoe ga je eigenlijk iemand 'uitloggen'?
-        return Promise.resolve();
+        let token = window.sessionStorage.getItem("loginToken");
+        if(!this.isLoggedIn() || !token)
+            return Promise.resolve(false); // no need to logout when not logged in
+        let jsonBody = JSON.stringify({"token": token});
+
+        let fetchoptions = {
+            method: "POST",
+            body: jsonBody,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        return Promise.resolve(fetch("api/user/logout", fetchoptions)
+            .then(function(response){
+                if(response.ok) return response.json()
+                else console.error("Error while logging out")
+            })
+            .then(result => window.sessionStorage.removeItem("loginToken"))
+            .catch(error => console.error(error)));
     }
 }

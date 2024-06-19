@@ -4,7 +4,7 @@
 import LoginService from "./login-service.js";
 
 let service = new LoginService();
-
+window.loginService = service;  // Make it globally accessible
 function refresh() {
     if (service.isLoggedIn()) {
         document.forms.login.style = "display:none";
