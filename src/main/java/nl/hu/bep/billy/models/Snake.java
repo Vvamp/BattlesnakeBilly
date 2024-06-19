@@ -2,10 +2,7 @@ package nl.hu.bep.billy.models;
 
 import nl.hu.bep.billy.ApiModels.GameRequest;
 import nl.hu.bep.billy.Customizations;
-import nl.hu.bep.billy.algorithms.IAlgorithm;
-import nl.hu.bep.billy.algorithms.Move;
-import nl.hu.bep.billy.algorithms.RandomAlgorithm;
-import nl.hu.bep.billy.algorithms.VvampAlgorithm;
+import nl.hu.bep.billy.algorithms.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +11,7 @@ public class Snake {
     private static int counter = 1;
     public final String apiversion = "1";
     public final String version = "0.1";
-    private final IAlgorithm brain;
+    private IAlgorithm brain;
     private final String author = "Vvamp";
     private final int id;
     private final List<Battle> battles = new ArrayList<>();
@@ -27,7 +24,7 @@ public class Snake {
         this.color = "#0000ff";
         this.head = Customizations.getRandomHead();
         this.tail = Customizations.getRandomTail();
-        this.brain = new VvampAlgorithm(); 
+        this.brain = new MctsAlgorithm();
     }
 
     public void endBattle(GameRequest request) {
@@ -49,6 +46,11 @@ public class Snake {
     }
 
     public Move play(GameRequest gameRequest) {
+        if(gameRequest.board.snakes.size() > 2){
+            brain = new RandomAlgorithm();
+        }else{
+            brain = new MctsAlgorithm();
+        }
         return brain.findBestMove(gameRequest);
     }
 

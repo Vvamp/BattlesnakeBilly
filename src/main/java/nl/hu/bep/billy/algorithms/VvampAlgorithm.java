@@ -51,7 +51,7 @@ public class VvampAlgorithm implements IAlgorithm {
             for (Coordinate b : s.body) {
                 danger.add(b);
             }
-            danger.removeLast(); // tail won't be there next turn
+            danger.remove(danger.get(danger.size()-1));// tail won't be there next turn
         }
 
 
@@ -91,6 +91,7 @@ public class VvampAlgorithm implements IAlgorithm {
 
         if(bestMoves.isEmpty()) {
             RandomAlgorithm ra = new RandomAlgorithm();
+            System.out.println("Random move cuz no good moves");
             return ra.findBestMove(turn);
         }
         bestMove = bestMoves.get(0);

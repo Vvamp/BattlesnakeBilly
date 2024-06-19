@@ -7,6 +7,6 @@ import java.util.Random;
 public class RandomAlgorithm implements  IAlgorithm{
     @Override
     public Move findBestMove(GameRequest turn) {
-        return Move.values()[new Random().nextInt(Move.values().length)];
+        return Move.values()[new Random().nextInt(Move.values().length-1)]; //-1 to exclude 'none'
     }
 }
