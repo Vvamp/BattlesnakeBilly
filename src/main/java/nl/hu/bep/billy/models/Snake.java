@@ -1,0 +1,117 @@
+package nl.hu.bep.billy.models;
+
+import nl.hu.bep.billy.ApiModels.GameRequest;
+import nl.hu.bep.billy.Customizations;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Snake {
+    private static int counter = 1;
+    public final String apiversion = "1";
+    public final String version = "0.1";
+    private final String author = "Vvamp";
+    private final int id;
+    private final List<Battle> battles = new ArrayList<>();
+    private String color;
+    private String tail;
+    private String head;
+
+    public Snake() {
+        this.id = counter++;
+        this.color = "#0000ff";
+        this.head = Customizations.getRandomHead();
+        this.tail = Customizations.getRandomTail();
+    }
+
+    public void endBattle(GameRequest request) {
+        playTurn(request, true);
+    }
+
+    public void addBattle(Battle battle) {
+        this.battles.add(battle);
+    }
+
+    public void updateBattle(Battle battle) {
+        for (int battleIndex = 0; battleIndex < battles.size(); battleIndex++) {
+            Battle currentBattle = battles.get(battleIndex);
+            if (currentBattle.getId().equals(battle.getId())) {
+                battles.set(battleIndex, battle);
+                return;
+            }
+        }
+    }
+
+    public void playTurn(GameRequest gameRequest) {
+        playTurn(gameRequest, false);
+    }
+
+    public void playTurn(GameRequest gameRequest, boolean lastTurn) {
+        String gameId = gameRequest.game.id;
+        for (Battle currentBattle : battles) {
+            if (currentBattle.getId().equals(gameId)) {
+                currentBattle.addTurn(gameRequest);
+                if (lastTurn) {
+                    currentBattle.end();
+                }
+                return;
+            }
+        }
+    }
+
+    public void deleteBattle(String gameId) {
+        Battle battleFound = null;
+        for (Battle currentBattle : battles) {
+            if (currentBattle.getId().equals(gameId)) {
+                battleFound = currentBattle;
+                break;
+            }
+        }
+        if(battleFound != null) {
+            battles.remove(battleFound);
+        }
+    }
+
+    public List<Battle> getBattles() {
+        return battles;
+    }
+
+    public String getTail() {
+        return tail;
+    }
+
+    public void setTail(String tail) {
+        if (!Customizations.isValidTail(tail)) {
+            return;
+        }
+        this.tail = tail;
+    }
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        if (!Customizations.isValidHead(head)) {
+            return;
+        }
+        this.head = head;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+}

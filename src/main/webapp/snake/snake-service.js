@@ -1,18 +1,40 @@
 export default class SnakeService {
     async getSnake() {
-        //TODO: haal deze data van de server
-        return Promise.resolve({
-            apiversion: "1",
-            author: "de dapper student",
-            color: "#ff0000",
-            head: "default",
-            tail: "default",
-            version: "0.1"
+
+
+        return fetch("/api/snake", {
+            method: "GET"
+        }).then(function(response){
+            if(response.ok){
+                return response.json();
+            }
+        }).then(function(snake){
+            return Promise.resolve({
+                apiversion: snake.apiversion,
+                author: snake.author,
+                color: snake.color,
+                head: snake.head,
+                tail: snake.tail,
+                version: snake.version
+            })
         });
     }
 
     async updateSnake(updatedSnake) {
-        //TODO: update je slang aan de server-kant met de nieuwe gegevens
-        return Promise.resolve();
+        let fetchoptions = {
+            method: "PUT",
+            body: JSON.stringify(updatedSnake),
+            headers: {"Content-Type": "application/json"}
+        };
+
+        //TODO: Add identifier as /api/snakes/:id
+        return fetch("/api/snake", fetchoptions)
+            .then(function(response){
+               if(response.ok) {
+                   return response.json();
+               }
+            }).then(function(result){
+                return Promise.resolve(result);
+        });
     }
 }
