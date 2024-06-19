@@ -5,6 +5,7 @@ import nl.hu.bep.billy.Customizations;
 import nl.hu.bep.billy.algorithms.IAlgorithm;
 import nl.hu.bep.billy.algorithms.Move;
 import nl.hu.bep.billy.algorithms.RandomAlgorithm;
+import nl.hu.bep.billy.algorithms.VvampAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Snake {
         this.color = "#0000ff";
         this.head = Customizations.getRandomHead();
         this.tail = Customizations.getRandomTail();
-        this.brain = new RandomAlgorithm(); //TODO:Change
+        this.brain = new VvampAlgorithm(); 
     }
 
     public void endBattle(GameRequest request) {
