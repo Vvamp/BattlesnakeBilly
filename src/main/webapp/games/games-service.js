@@ -1,7 +1,11 @@
 export default class GamesService {
     async getGameIds() {
         return fetch("/api/games", {
-            method: "GET"
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + window.sessionStorage.getItem("loginToken")
+            }
         }).then(function(response){
             if(response.ok){
                 return response.json();
@@ -16,7 +20,11 @@ export default class GamesService {
         //zolang je maar laat zien dat je data kunt opslaan over meerdere zetten heen. Dus deze dummy-data is puur
         //ter illustratie.
         return fetch("/api/games/" + gameId, {
-            method: "GET"
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + window.sessionStorage.getItem("loginToken")
+            }
         }).then(function(response){
             if(response.ok){
                 return response.json();
@@ -28,7 +36,11 @@ export default class GamesService {
 
     async removeReplay(gameId) {
         return fetch("/api/games/" + gameId, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + window.sessionStorage.getItem("loginToken")
+            }
         }).then(function(response){
             if(response.ok){
                 return response.json();

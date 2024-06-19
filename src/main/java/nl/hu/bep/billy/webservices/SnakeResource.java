@@ -3,61 +3,107 @@ package nl.hu.bep.billy.webservices;
 import nl.hu.bep.billy.ApiModels.*;
 import nl.hu.bep.billy.models.Battle;
 import nl.hu.bep.billy.models.Snake;
-import nl.hu.bep.billy.models.SnakeDen;
 
-import javax.json.JsonObjectBuilder;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import nl.hu.bep.billy.authentication.User;
+import nl.hu.bep.billy.security.MySecurityContext;
 
-@Path("/snake")
+@Path("/snakes")
 public class SnakeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSnakes() {
-        List<Snake> snakes = SnakeDen.getSnakes();
-        Snake snake = snakes.get(0);
+        List<User> users = User.getAll();
+
+        List<Snake> snakes = new ArrayList<>();
+        for (User user : users) {
+            snakes.add(user.getSnake());
+        }
+
+        return Response.status(Response.Status.OK).entity(snakes).build();
+    }
+
+    @GET
+    @Path("{user}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSnakeByName(@PathParam("user") String user) {
+        User currentUser = User.getUserByName(user);
+        if (currentUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        Snake snake = currentUser.getSnake();
         return Response.status(Response.Status.OK).entity(snake).build();
     }
 
 
     @PUT
+    @RolesAllowed("user")
+    @Path("{user}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateSnake(SnakePatchRequest snakePatchRequest) {
-        // TODO: default first snake
-        SnakeDen.updateSnake(snakePatchRequest.color, snakePatchRequest.head, snakePatchRequest.tail); // TODO: get from index
-        return Response.status(Response.Status.OK).entity(SnakeDen.getSnakes().get(0)).build();
+    public Response updateSnake(@Context MySecurityContext sc, @PathParam("user") String user, SnakePatchRequest snakePatchRequest) {
+        if(sc == null){
+            System.err.println("SC is null?!");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        if(!(sc.getUserPrincipal() instanceof User)){
+            System.out.println("Not user");
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        User passedUser = User.getUserByName(user);
+        User currentUser = (User) sc.getUserPrincipal();
+        if(passedUser != currentUser){
+            System.out.println("Not same user");
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        Snake snake = currentUser.getSnake();
+
+        snake.update(snakePatchRequest.color, snakePatchRequest.head, snakePatchRequest.tail);
+        return Response.status(Response.Status.OK).entity(snake).build();
 
 
     }
 
     @POST
-    @Path("/start")
+    @Path("{user}/start")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response start(GameRequest request) {
+    public Response start(@PathParam("user") String user, GameRequest request) {
+        User currentUser = User.getUserByName(user);
+        if (currentUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        Snake snake = currentUser.getSnake();
         Map<String, String> messages = new HashMap<>();
         messages.put("shout", "GLHF :)");
-        List<Snake> snakes = SnakeDen.getSnakes();
-        Snake snake = snakes.get(0);
         snake.addBattle(new Battle(request));
         return Response.status(Response.Status.OK).entity(messages).build();
     }
 
     @POST
-    @Path("/move")
+    @Path("{user}/move")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response move(GameRequest request) {
+    public Response move(@PathParam("user") String user, GameRequest request) {
+        User currentUser = User.getUserByName(user);
+        if (currentUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        Snake snake = currentUser.getSnake();
         Map<String, String> messages = new HashMap<>();
         messages.put("move", "up");
         messages.put("shout", "GOING UP UP UP");
-        List<Snake> snakes = SnakeDen.getSnakes();
-        Snake snake = snakes.get(0);
         snake.playTurn(request);
         //TODO:
         /*
@@ -75,14 +121,17 @@ public class SnakeResource {
     }
 
     @POST
-    @Path("/end")
+    @Path("{user}/end")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response end(GameRequest request) {
+    public Response end(@PathParam("user") String user, GameRequest request) {
+        User currentUser = User.getUserByName(user);
+        if (currentUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        Snake snake = currentUser.getSnake();
         Map<String, String> messages = new HashMap<>();
         messages.put("shout", "OK. GG");
-        List<Snake> snakes = SnakeDen.getSnakes();
-        Snake snake = snakes.get(0);
         snake.endBattle(request);
         return Response.status(Response.Status.OK).entity(messages).build();
     }
@@ -90,20 +139,4 @@ public class SnakeResource {
 
 
 
-    @Path("/init")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response init(){
-        // create 3 random snakes
-        String[] colors = {"#FF0000", "#00FF00", "#0000FF"};
-        for(int i = 0; i < 1; i++){
-            Snake snake = new Snake();
-            snake.setHead("evil");
-            snake.setTail("coffee");
-            snake.setColor(colors[i]);
-            SnakeDen.addSnake(snake);
-        }
-
-        return Response.status(Response.Status.OK).build();
-    }
 }

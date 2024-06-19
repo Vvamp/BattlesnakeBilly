@@ -1,9 +1,14 @@
 export default class SnakeService {
     async getSnake() {
 
+        let username = window.sessionStorage.getItem("user");
 
-        return fetch("/api/snake", {
-            method: "GET"
+        return fetch("/api/snakes/" + username, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + window.sessionStorage.getItem("loginToken")
+            }
         }).then(function(response){
             if(response.ok){
                 return response.json();
@@ -24,11 +29,14 @@ export default class SnakeService {
         let fetchoptions = {
             method: "PUT",
             body: JSON.stringify(updatedSnake),
-            headers: {"Content-Type": "application/json"}
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + window.sessionStorage.getItem("loginToken")
+            }
         };
+        let username = window.sessionStorage.getItem("user");
 
-        //TODO: Add identifier as /api/snakes/:id
-        return fetch("/api/snake", fetchoptions)
+        return fetch("/api/snakes/" + username, fetchoptions)
             .then(function(response){
                if(response.ok) {
                    return response.json();

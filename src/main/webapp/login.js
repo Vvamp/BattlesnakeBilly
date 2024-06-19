@@ -9,6 +9,7 @@ function refresh() {
     if (service.isLoggedIn()) {
         document.forms.login.style = "display:none";
         document.forms.logout.style = "display:block";
+        document.querySelector("#user").textContent = window.sessionStorage.getItem("user");
     } else {
         document.forms.logout.style = "display:none";
         document.forms.login.style = "display:block";

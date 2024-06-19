@@ -110,6 +110,18 @@ public class Snake {
         this.color = color;
     }
 
+    public void update(String color, String head, String tail){
+        if(!color.isEmpty()){
+            this.color = color;
+        }
+        if(!head.isEmpty() && Customizations.isValidHead(head)){
+            this.head = head;
+        }
+        if(!tail.isEmpty() && Customizations.isValidTail(tail)){
+            this.tail = tail;
+        }
+    }
+
     public String getAuthor() {
         return author;
     }
