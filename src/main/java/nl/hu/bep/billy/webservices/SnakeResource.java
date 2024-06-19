@@ -1,6 +1,7 @@
 package nl.hu.bep.billy.webservices;
 
 import nl.hu.bep.billy.ApiModels.*;
+import nl.hu.bep.billy.algorithms.Move;
 import nl.hu.bep.billy.models.Battle;
 import nl.hu.bep.billy.models.Snake;
 
@@ -95,10 +96,14 @@ public class SnakeResource {
         }
 
         Snake snake = currentUser.getSnake();
+        snake.registerTurn(request);
+
+        Move move = snake.play(request);
+
         Map<String, String> messages = new HashMap<>();
-        messages.put("move", "up");
-        messages.put("shout", "GOING UP UP UP");
-        snake.playTurn(request);
+        messages.put("move", move.toString().toLowerCase());
+        messages.put("shout", "no shouts right now");
+
         //TODO:
         /*
         * playTurn returns enum: UP,DOWN,LEFT,RIGHT,NONE/UNKNOWN

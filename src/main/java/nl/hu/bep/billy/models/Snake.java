@@ -2,6 +2,9 @@ package nl.hu.bep.billy.models;
 
 import nl.hu.bep.billy.ApiModels.GameRequest;
 import nl.hu.bep.billy.Customizations;
+import nl.hu.bep.billy.algorithms.IAlgorithm;
+import nl.hu.bep.billy.algorithms.Move;
+import nl.hu.bep.billy.algorithms.RandomAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ public class Snake {
     private static int counter = 1;
     public final String apiversion = "1";
     public final String version = "0.1";
+    private final IAlgorithm brain;
     private final String author = "Vvamp";
     private final int id;
     private final List<Battle> battles = new ArrayList<>();
@@ -22,10 +26,11 @@ public class Snake {
         this.color = "#0000ff";
         this.head = Customizations.getRandomHead();
         this.tail = Customizations.getRandomTail();
+        this.brain = new RandomAlgorithm(); //TODO:Change
     }
 
     public void endBattle(GameRequest request) {
-        playTurn(request, true);
+        registerTurn(request, true);
     }
 
     public void addBattle(Battle battle) {
@@ -42,11 +47,15 @@ public class Snake {
         }
     }
 
-    public void playTurn(GameRequest gameRequest) {
-        playTurn(gameRequest, false);
+    public Move play(GameRequest gameRequest) {
+        return brain.findBestMove(gameRequest);
     }
 
-    public void playTurn(GameRequest gameRequest, boolean lastTurn) {
+    public void registerTurn(GameRequest gameRequest) {
+        registerTurn(gameRequest, false);
+    }
+
+    public void registerTurn(GameRequest gameRequest, boolean lastTurn) {
         String gameId = gameRequest.game.id;
         for (Battle currentBattle : battles) {
             if (currentBattle.getId().equals(gameId)) {
