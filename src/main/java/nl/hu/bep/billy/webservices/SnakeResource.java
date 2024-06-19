@@ -6,6 +6,7 @@ import nl.hu.bep.billy.models.Snake;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -50,23 +51,16 @@ public class SnakeResource {
     @Path("{user}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateSnake(@Context MySecurityContext sc, @PathParam("user") String user, SnakePatchRequest snakePatchRequest) {
-        if(sc == null){
-            System.err.println("SC is null?!");
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        if(!(sc.getUserPrincipal() instanceof User)){
-            System.out.println("Not user");
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+    public Response updateSnake(@Context ContainerRequestContext requestCtx, @PathParam("user") String user, SnakePatchRequest snakePatchRequest) {
+        MySecurityContext sc = (MySecurityContext) requestCtx.getSecurityContext(); // simply passing MySecurityContext as param didn't work(it was null)
+        if(sc == null) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(!(sc.getUserPrincipal() instanceof User)) return Response.status(Response.Status.FORBIDDEN).build();
+
         User passedUser = User.getUserByName(user);
         User currentUser = (User) sc.getUserPrincipal();
-        if(passedUser != currentUser){
-            System.out.println("Not same user");
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-        Snake snake = currentUser.getSnake();
+        if(passedUser != currentUser) return Response.status(Response.Status.FORBIDDEN).build();
 
+        Snake snake = currentUser.getSnake();
         snake.update(snakePatchRequest.color, snakePatchRequest.head, snakePatchRequest.tail);
         return Response.status(Response.Status.OK).entity(snake).build();
 

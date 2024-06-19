@@ -20,6 +20,7 @@ public class LoginManager {
         if(users == null) {
             users = new HashMap<>();
             users.put("Vvamp", new User("Vvamp", "admin", "user"));
+            users.put("NietVvamp", new User("NietVvamp", "anders", "user"));
         }
         if(validatedTokens == null) {
             validatedTokens = new ArrayList<>();
