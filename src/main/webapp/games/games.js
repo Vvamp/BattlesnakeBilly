@@ -16,8 +16,26 @@ function loadGame(hashId) {
     let id = hashId.substring(1);
     return gamesService.getReplay(id).then(gameDetails => {
         if (gameDetails) {
-            let text = details.querySelector('pre');
-            text.innerText = JSON.stringify(gameDetails);
+            let game_details = document.querySelector('#game-details');
+
+            let game_id = game_details.querySelector('#game-id');
+            game_id.textContent = gameDetails.gameid;
+
+            let game_res = game_details.querySelector('#game-result');
+            game_res.textContent = gameDetails.gameresult;
+
+            let turn = game_details.querySelector('#game-turns');
+            turn.textContent = gameDetails.turns;
+
+            let game_algo = game_details.querySelector('#game-algorithm');
+            game_algo.textContent = gameDetails.algorithm;
+
+            let snakeid = game_details.querySelector('#snake-id');
+            snakeid.textContent = gameDetails.snakeid;
+
+            let snakeip = game_details.querySelector('#snake-ip');
+            snakeip.textContent = gameDetails.inProgress;
+
             details.classList.remove('hidden');
         } else {
             details.classList.add('hidden')

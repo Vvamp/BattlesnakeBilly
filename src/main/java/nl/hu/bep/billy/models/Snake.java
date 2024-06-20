@@ -56,6 +56,8 @@ public class Snake {
 //            System.out.println("[Brain] set to mcts (<=2)");
             brain = new MctsAlgorithm();
         }
+        gameRequest.setAlgorithm(brain.getName());
+
         return brain.findBestMove(gameRequest);
     }
 

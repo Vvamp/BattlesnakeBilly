@@ -1,5 +1,6 @@
 package nl.hu.bep.billy.webservices;
 
+import nl.hu.bep.billy.ApiModels.GameResult;
 import nl.hu.bep.billy.authentication.User;
 import nl.hu.bep.billy.models.Battle;
 import nl.hu.bep.billy.models.Snake;
@@ -44,7 +45,8 @@ public class GameResource {
         if (battle == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.status(Response.Status.OK).entity(battle).build();
+        GameResult result = new GameResult(battle.getId(), battle.getResult(), battle.getTurnCount(), battle.isInProgress(), battle.getMostUsedAlgorithm(), battle.getPlayerId());
+        return Response.status(Response.Status.OK).entity(result).build();
     }
 
     @DELETE

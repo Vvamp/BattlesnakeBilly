@@ -23,6 +23,10 @@ public class VvampAlgorithm implements IAlgorithm {
     private final int maxFoodDistance = 4;
     private Move lastMove = Move.NONE;
 
+    @Override
+    public String getName(){
+        return "Vvamp-Custom";
+    }
     private int findStepsToCoordinate(Coordinate initial, Coordinate target) {
         return Math.abs(initial.x - target.x) + Math.abs(initial.y - target.y);
     }

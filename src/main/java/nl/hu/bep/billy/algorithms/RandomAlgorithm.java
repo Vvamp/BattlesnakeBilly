@@ -9,4 +9,9 @@ public class RandomAlgorithm implements IAlgorithm {
     public Move findBestMove(GameRequest turn) {
         return Move.values()[new Random().nextInt(Move.values().length - 1)]; //-1 to exclude 'none'
     }
+
+    @Override
+    public String getName(){
+        return "Random";
+    }
 }

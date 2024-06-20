@@ -14,6 +14,11 @@ public class MctsAlgorithm implements IAlgorithm {
 
     private static Move lastMove = Move.NONE;
 
+    @Override
+    public String getName(){
+        return "MCTS";
+    }
+
     public static Move getInvertedMove(Move move) {
         if (move == null) return Move.NONE;
         return switch (move) {

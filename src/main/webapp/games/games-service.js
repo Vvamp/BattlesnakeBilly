@@ -27,9 +27,12 @@ export default class GamesService {
             }
         }).then(function(response){
             if(response.ok){
+                console.log("response ok replay");
                 return response.json();
             }
+            console.log("response NOT ok");
         }).then(function(game) {
+            console.log("return replay: " + game);
             return Promise.resolve(game)
         });
     }

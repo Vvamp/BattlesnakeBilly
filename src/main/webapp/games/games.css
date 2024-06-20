@@ -4,7 +4,7 @@
 
 main {
     display: grid;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: 25em 1fr;
 }
 
 .hidden {
@@ -20,4 +20,11 @@ main {
 pre {
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+#game-details{
+    list-style-type: none;
+}
+#game-details p{
+    display: inline;
 }
