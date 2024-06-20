@@ -12,7 +12,7 @@ html, body {
 
 body {
     margin: 0;
-    background: linear-gradient(135deg, #E80987 15%, #3E338F 100%);
+    background: linear-gradient(135deg, #56bdfa 15%, #3E338F 100%);
     color: #f0f0f0;
 
     display: grid;
@@ -30,8 +30,11 @@ header {
 }
 
 header h1 {
-    text-align: center;
+    text-align: left;
+    text-indent: 6.5em;
     flex-grow: 1;
+    height: 3.5em;
+    line-height: 3.5em;
 }
 
 nav {
@@ -48,16 +51,36 @@ nav ul {
 }
 
 nav a {
-    padding: 10px 0;
     display: inline-block;
-    width: 80%;
-    margin-left: 20%;
+    width: 10em;
+    border-radius: 5em;
+    text-align: center;
+    /*margin-left: 20%;*/
+    margin-left: 1em;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1em 2em;
     color: #f0f0f0;
+    margin-bottom: 1em;
+    background-color: #135fc7;
+    transition: 100ms;
 }
 
 nav a:hover {
-    background-color: #617182;
+    background-color: #3E338F;
+    transition: 100ms;
+
+
 }
+
+h1 > a{
+    color: inherit;
+    text-decoration: none;
+}
+h1 > a:hover{
+    color: inherit;
+}
+
 
 main {
     grid-area: body;
@@ -70,8 +93,18 @@ main {
 .login {
     width: 300px;
     border-left: 1px solid #f0f0f0;
-    padding-left: 20px;
+    padding: 0em 2em;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+input[type="text"], input[type="password"]{
+    border: none;
+    border-radius: 2em;
+    text-indent: 1em;
+    padding: .2em;
 }
 
 .login input {
@@ -80,9 +113,24 @@ main {
 }
 
 .login button {
-    float: right;
+    border:none;
+    border-radius: 2em;
+    color: #f0f0f0;
+    transition: 100ms;
+    background-color: #3E338F;
+    padding: .4em;
+    margin: 0em 3em;
 }
-
+.login button:hover {
+    background-color: #4d54b6;
+    cursor: pointer;
+    transition: 100ms;
+}
 form[name=logout] {
     display: none;
+}
+form[name=login] {
+    display: flex;
+    flex-direction: column;
+    gap: .3em;
 }

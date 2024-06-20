@@ -8,11 +8,11 @@ window.loginService = service;  // Make it globally accessible
 function refresh() {
     if (service.isLoggedIn()) {
         document.forms.login.style = "display:none";
-        document.forms.logout.style = "display:block";
+        document.forms.logout.style = "display:flex";
         document.querySelector("#user").textContent = window.sessionStorage.getItem("user");
     } else {
         document.forms.logout.style = "display:none";
-        document.forms.login.style = "display:block";
+        document.forms.login.style = "display:flex";
     }
 }
 
