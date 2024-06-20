@@ -15,13 +15,13 @@
     <h1><a href="/">Billy! ~ 🐍 ~ The MCTS Battlesnake agent</a></h1>
     <div class="login">
         <form name="login">
-            <label>Username: <input type="text" name="username"></label>
-            <label>Password: <input type="password" name="password"></label>
-            <button>Log in</button>
+            <label>Username: <input tabindex="1" type="text" name="username"></label>
+            <label>Password: <input tabindex="2" type="password" name="password"></label>
+            <button tabindex="3">Log in</button>
         </form>
         <form name="logout">
             <p>Welcome <span id="user"></span></p>
-            <button>Log out</button>
+            <button tabindex="1">Log out</button>
         </form>
         <script src="login.js" type="module"></script>
     </div>
@@ -30,8 +30,8 @@
 
 <nav>
     <ul>
-        <li><a href="snake/snake.html">Edit Snake</a></li>
-        <li><a href="games/games.html">Games</a></li>
+        <li class="privileged"><a tabindex="2" href="snake/snake.html">Edit Snake</a></li>
+        <li class="privileged"><a  tabindex="3" href="games/games.html">Games</a></li>
     </ul>
 </nav>
 

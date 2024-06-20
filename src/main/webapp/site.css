@@ -64,6 +64,8 @@ nav a {
     margin-bottom: 1em;
     background-color: #135fc7;
     transition: 100ms;
+    text-wrap: nowrap;
+    overflow: hidden;
 }
 
 nav a:hover {
@@ -76,6 +78,8 @@ nav a:hover {
 h1 > a{
     color: inherit;
     text-decoration: none;
+    text-wrap: nowrap;
+    overflow: hidden;
 }
 h1 > a:hover{
     color: inherit;
@@ -88,6 +92,7 @@ main {
     color: #617182;
     padding: 1rem 2rem;
     border-top-left-radius: 3rem;
+
 }
 
 .login {
@@ -128,9 +133,25 @@ input[type="text"], input[type="password"]{
 }
 form[name=logout] {
     display: none;
+    flex-direction: column;
 }
+
+form[name=logout] > p {
+    font-weight: bold;
+}
+
+form[name=logout] button {
+    padding: 1em;
+}
+
+
 form[name=login] {
     display: flex;
     flex-direction: column;
     gap: .3em;
+}
+
+
+.privileged{
+    display: none;
 }

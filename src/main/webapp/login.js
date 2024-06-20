@@ -6,13 +6,22 @@ import LoginService from "./login-service.js";
 let service = new LoginService();
 window.loginService = service;  // Make it globally accessible
 function refresh() {
+    let privItems = document.getElementsByClassName("privileged");
+
+
     if (service.isLoggedIn()) {
         document.forms.login.style = "display:none";
         document.forms.logout.style = "display:flex";
         document.querySelector("#user").textContent = window.sessionStorage.getItem("user");
+        Array.from(privItems).forEach((privItem) => {
+            privItem.style = "display: inline";
+        })
     } else {
         document.forms.logout.style = "display:none";
         document.forms.login.style = "display:flex";
+        Array.from(privItems).forEach((privItem) => {
+            privItem.style = "display: none";
+        })
     }
 }
 
