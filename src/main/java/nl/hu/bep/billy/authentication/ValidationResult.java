@@ -8,17 +8,19 @@ public class ValidationResult {
     public ValidationResult(ValidationStatus status, String details, User user) {
         this.status = status;
         this.details = details;
-        this.user= user;
+        this.user = user;
     }
+
     public ValidationResult(ValidationStatus status, String details) {
         this.status = status;
         this.details = details;
         this.user = null;
     }
 
-    public User getUser(){
+    public User getUser() {
         return user;
     }
+
     public ValidationStatus getStatus() {
         return status;
     }

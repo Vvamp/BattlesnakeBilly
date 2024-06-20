@@ -1,10 +1,6 @@
 package nl.hu.bep.billy.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
 import nl.hu.bep.billy.authentication.LoginManager;
-import nl.hu.bep.billy.authentication.User;
 import nl.hu.bep.billy.authentication.ValidationResult;
 import nl.hu.bep.billy.authentication.ValidationStatus;
 

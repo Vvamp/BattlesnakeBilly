@@ -1,11 +1,11 @@
 package nl.hu.bep.billy.webservices;
 
+import io.jsonwebtoken.JwtException;
+import nl.hu.bep.billy.ApiModels.LogonRequest;
+import nl.hu.bep.billy.ApiModels.TokenRequest;
 import nl.hu.bep.billy.authentication.LoginManager;
 import nl.hu.bep.billy.authentication.ValidationResult;
 import nl.hu.bep.billy.authentication.ValidationStatus;
-import io.jsonwebtoken.JwtException;
-import nl.hu.bep.billy.ApiModels.TokenRequest;
-import nl.hu.bep.billy.ApiModels.LogonRequest;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -21,19 +21,20 @@ public class LoginResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/login")
-    public Response authenticateUser(LogonRequest request){
-        try{
+    public Response authenticateUser(LogonRequest request) {
+        try {
             LoginManager loginManager = new LoginManager();
             String role = loginManager.validateLogin(request.user, request.password);
-            if(role == null){
-                throw new IllegalArgumentException("Invalid username or password"); }
+            if (role == null) {
+                throw new IllegalArgumentException("Invalid username or password");
+            }
             String token = loginManager.createToken(request.user, role);
             loginManager.validateToken(token);
             return Response.ok(new AbstractMap.SimpleEntry<>("JWT", token)).build();
-        }catch(JwtException | IllegalArgumentException e){
+        } catch (JwtException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).build();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("Error", "Failed to authenticate")).build();
         }
@@ -44,9 +45,8 @@ public class LoginResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/validate")
-    public Response validateToken(@QueryParam("token") String token){
-        if(token.isEmpty())
-            return Response.status(422).build();
+    public Response validateToken(@QueryParam("token") String token) {
+        if (token.isEmpty()) return Response.status(422).build();
         LoginManager loginManager = new LoginManager();
         ValidationResult result = loginManager.checkTokenValidity(token);
         Map<String, Object> response = new HashMap<>();
@@ -60,7 +60,7 @@ public class LoginResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/logout")
-    public Response logoutUser(TokenRequest request){
+    public Response logoutUser(TokenRequest request) {
         LoginManager loginManager = new LoginManager();
         loginManager.invalidateToken(request.token);
         return Response.ok().entity(Map.of("Success", "You are now logged out")).build();

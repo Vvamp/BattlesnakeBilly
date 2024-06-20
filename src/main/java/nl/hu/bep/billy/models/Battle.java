@@ -1,7 +1,6 @@
 package nl.hu.bep.billy.models;
 
 import nl.hu.bep.billy.ApiModels.Battlesnake;
-import nl.hu.bep.billy.ApiModels.Game;
 import nl.hu.bep.billy.ApiModels.GameRequest;
 import nl.hu.bep.billy.ApiModels.Ruleset;
 
@@ -9,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Battle {
-    private String id;
+    private final String id;
+    private final List<Battlesnake> otherBattlesnakes;
+    private final List<GameRequest> turns;
+    private final Ruleset ruleset;
     private Battlesnake myBattlesnake;
-    private List<Battlesnake> otherBattlesnakes;
-    private List<GameRequest> turns;
-    private Ruleset ruleset;
     private boolean isInProgress;
 
 //    public Battle(String id, Battlesnake myBattlesnake, List<Battlesnake> otherBattlesnakes, List<GameRequest> turns, Ruleset ruleset){
@@ -24,7 +23,7 @@ public class Battle {
 //        this.ruleset = ruleset;
 //    }
 
-    public Battle(GameRequest gameRequest){
+    public Battle(GameRequest gameRequest) {
         this.id = gameRequest.game.id;
         this.myBattlesnake = gameRequest.you;
         this.otherBattlesnakes = gameRequest.board.snakes;
@@ -32,6 +31,16 @@ public class Battle {
         this.turns.add(gameRequest);
         this.ruleset = gameRequest.game.ruleset;
         this.isInProgress = true;
+    }
+
+    public void addTurn(GameRequest turn) {
+        this.setMyBattlesnake(turn.you);
+        this.turns.add(turn);
+    }
+
+    public void end() {
+        this.isInProgress = false;
+        // calc end condition and stats
     }
 
     public String getId() {
@@ -54,18 +63,8 @@ public class Battle {
         return turns;
     }
 
-    public void addTurn(GameRequest turn) {
-        this.setMyBattlesnake(turn.you);
-        this.turns.add(turn);
-    }
-
     public Ruleset getRuleset() {
         return ruleset;
-    }
-
-    public void end(){
-        this.isInProgress = false;
-        // calc end condition and stats
     }
 
 //    private EndCondition{ // WinCondition, LossCondition

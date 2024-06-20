@@ -7,6 +7,18 @@ import nl.hu.bep.billy.ApiModels.GameRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO:
+/*
+ * playTurn returns enum: UP,DOWN,LEFT,RIGHT,NONE/UNKNOWN
+ * algorithm:
+ * Find nearest piece
+ * Check if I am closer than the rest
+ * If so: GO
+ * if not, find second nearest piece
+ * etc
+ *
+ * if none, try and kill/stay alive
+ * */
 public class VvampAlgorithm implements IAlgorithm {
     private final int maxFoodDistance = 4;
     private Move lastMove = Move.NONE;
@@ -51,7 +63,7 @@ public class VvampAlgorithm implements IAlgorithm {
             for (Coordinate b : s.body) {
                 danger.add(b);
             }
-            danger.remove(danger.get(danger.size()-1));// tail won't be there next turn
+            danger.remove(danger.get(danger.size() - 1));// tail won't be there next turn
         }
 
 
@@ -84,12 +96,12 @@ public class VvampAlgorithm implements IAlgorithm {
                     target.y--;
                     break;
             }
-            if(danger.stream().anyMatch(d -> d.x == target.x && d.y == target.y)) {
+            if (danger.stream().anyMatch(d -> d.x == target.x && d.y == target.y)) {
                 bestMoves.remove(m);
             }
         }
 
-        if(bestMoves.isEmpty()) {
+        if (bestMoves.isEmpty()) {
             RandomAlgorithm ra = new RandomAlgorithm();
             System.out.println("Random move cuz no good moves");
             return ra.findBestMove(turn);

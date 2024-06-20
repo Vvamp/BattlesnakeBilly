@@ -6,11 +6,14 @@ public class GameRequest {
     public Board board;
     public Battlesnake you;
 
+    public GameRequest() {
+    }
+
     public GameRequest(Game game, int turn, Board board, Battlesnake you) {
-        this.game = game;
+        this.game = new Game(game);
         this.turn = turn;
-        this.board = board;
-        this.you = you;
+        this.board = new Board(board);
+        this.you = new Battlesnake(you);
     }
 
     public GameRequest(GameRequest gamerequest) {

@@ -1,9 +1,12 @@
 package nl.hu.bep.billy.ApiModels;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nl.hu.bep.billy.algorithms.Move;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Battlesnake {
     public String id;
     public String name;
@@ -16,6 +19,24 @@ public class Battlesnake {
     public String squad;
     public Customizations customizations;
     private boolean foundFood = false;
+    private Move direction = Move.NONE;
+
+    public Battlesnake(Battlesnake other) {
+        this.id = other.id;
+        this.name = other.name;
+        this.health = other.health;
+        this.body = other.body.stream().map(Coordinate::new).collect(Collectors.toList());
+        this.latency = other.latency;
+        this.head = new Coordinate(other.head);
+        this.length = other.length;
+        this.shout = other.shout;
+        this.squad = other.squad;
+        this.customizations = new Customizations(other.customizations);
+        this.foundFood = other.foundFood;
+    }
+
+    public Battlesnake() {
+    }
 
     public boolean hasFoundFood() {
         return foundFood;
@@ -26,22 +47,11 @@ public class Battlesnake {
     }
 
     public Move getDirection() {
-        int ax = body.get(0).x;
-        int ay = body.get(0).y;
-        int bx = body.get(1).x;
-        int by = body.get(1).y;
+        return direction;
+    }
 
-        if (ax > bx) {
-            return Move.RIGHT;
-        } else if (ax < bx) {
-            return Move.LEFT;
-        }
-        if (ay > by) {
-            return Move.UP;
-        } else {
-            return Move.DOWN;
-        }
-
+    public void setDirection(Move direction) {
+        this.direction = direction;
     }
 
     public Move getInvertedDirection() {

@@ -9,9 +9,9 @@ public class Node {
     private final GameState gamestate;
     private final Node parent;
     private final List<Node> children;
+    private final Map<Battlesnake, Move> moves;
     private double visits;
     private double value;
-    private final Map<Battlesnake, Move> moves;
 
     public Node(GameState gamestate, Map<Battlesnake, Move> moves, Node parent) {
         this.gamestate = gamestate;
@@ -37,7 +37,7 @@ public class Node {
     }
 
     public List<Move> getValidUnexploredMoves(Battlesnake snake) {
-        return null;
+        return gamestate.getLegalMoves(snake);
     }
 
     public Node getParent() {
@@ -55,8 +55,16 @@ public class Node {
     public List<Map<Battlesnake, Move>> getValidMoveCombinations() {
         List<Map<Battlesnake, Move>> combinations = new ArrayList<>();
         Battlesnake me = gamestate.getPlayer();
-        Battlesnake opponent = gamestate.getOpponent();
         List<Move> myMoves = gamestate.getLegalMoves(me);
+        Battlesnake opponent = gamestate.getOpponent();
+        if (opponent == null) {
+            for (Move myMove : myMoves) {
+                Map<Battlesnake, Move> moveRound = new HashMap();
+                moveRound.put(me, myMove);
+                combinations.add(moveRound);
+            }
+            return combinations;
+        }
         List<Move> theirMoves = gamestate.getLegalMoves(opponent);
         for (Move myMove : myMoves) {
             Map<Battlesnake, Move> moveRound = new HashMap();

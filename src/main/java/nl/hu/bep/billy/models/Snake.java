@@ -2,7 +2,10 @@ package nl.hu.bep.billy.models;
 
 import nl.hu.bep.billy.ApiModels.GameRequest;
 import nl.hu.bep.billy.Customizations;
-import nl.hu.bep.billy.algorithms.*;
+import nl.hu.bep.billy.algorithms.IAlgorithm;
+import nl.hu.bep.billy.algorithms.MctsAlgorithm;
+import nl.hu.bep.billy.algorithms.Move;
+import nl.hu.bep.billy.algorithms.RandomAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +14,10 @@ public class Snake {
     private static int counter = 1;
     public final String apiversion = "1";
     public final String version = "0.1";
-    private IAlgorithm brain;
     private final String author = "Vvamp";
     private final int id;
     private final List<Battle> battles = new ArrayList<>();
+    private IAlgorithm brain;
     private String color;
     private String tail;
     private String head;
@@ -46,9 +49,11 @@ public class Snake {
     }
 
     public Move play(GameRequest gameRequest) {
-        if(gameRequest.board.snakes.size() > 2){
+        if (gameRequest.board.snakes.size() > 2) {
+//            System.out.println("[Brain] set to random (>2)");
             brain = new RandomAlgorithm();
-        }else{
+        } else {
+//            System.out.println("[Brain] set to mcts (<=2)");
             brain = new MctsAlgorithm();
         }
         return brain.findBestMove(gameRequest);
@@ -79,8 +84,20 @@ public class Snake {
                 break;
             }
         }
-        if(battleFound != null) {
+        if (battleFound != null) {
             battles.remove(battleFound);
+        }
+    }
+
+    public void update(String color, String head, String tail) {
+        if (!color.isEmpty()) {
+            this.color = color;
+        }
+        if (!head.isEmpty() && Customizations.isValidHead(head)) {
+            this.head = head;
+        }
+        if (!tail.isEmpty() && Customizations.isValidTail(tail)) {
+            this.tail = tail;
         }
     }
 
@@ -120,18 +137,6 @@ public class Snake {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    public void update(String color, String head, String tail){
-        if(!color.isEmpty()){
-            this.color = color;
-        }
-        if(!head.isEmpty() && Customizations.isValidHead(head)){
-            this.head = head;
-        }
-        if(!tail.isEmpty() && Customizations.isValidTail(tail)){
-            this.tail = tail;
-        }
     }
 
     public String getAuthor() {

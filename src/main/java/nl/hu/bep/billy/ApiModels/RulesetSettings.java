@@ -2,6 +2,7 @@ package nl.hu.bep.billy.ApiModels;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RulesetSettings {
     public int foodSpawnChance;
@@ -25,4 +26,17 @@ public class RulesetSettings {
     @JsonProperty("squad.sharedLength")
     public boolean sharedLength;
 
+    public RulesetSettings() {
+    }
+
+    public RulesetSettings(RulesetSettings other) {
+        this.foodSpawnChance = other.foodSpawnChance;
+        this.minimumFood = other.minimumFood;
+        this.hazardDamagePerTurn = other.hazardDamagePerTurn;
+        this.shrinkEveryNTurns = other.shrinkEveryNTurns;
+        this.allowBodyCollisions = other.allowBodyCollisions;
+        this.sharedElimination = other.sharedElimination;
+        this.sharedHealth = other.sharedHealth;
+        this.sharedLength = other.sharedLength;
+    }
 }
