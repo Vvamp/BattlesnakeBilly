@@ -61,6 +61,7 @@ public class GameResource {
 
         Snake snake = user.getSnake();
         Battle battle = snake.getBattles().stream().filter((b) -> b.getId().equals(id)).findFirst().orElse(null);
+        snake.deleteBattle(id);
         if (battle == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

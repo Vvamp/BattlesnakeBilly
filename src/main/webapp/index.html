@@ -36,8 +36,21 @@
 </nav>
 
 <main>
-    <h2>Billy - Java Battlesnake Agent</h2>
-    <p>Billy uses a slightly modified MCTS algorithm to play when faced with a single opponent. He uses random moves before that and switches automatically when only 1 opponent is left.</p>
+    <h2 style="margin-bottom: 0.1rem">Meet Billy</h2>
+    <small style="display:block; margin-bottom: 1rem">Made by Vincent van Setten, student number 1734729</small>
+    <img src="assets/billy.svg"/>
+    <p>Billy is a battlesnake agent equipped with the powerful MCTS algorithm. It is slightly modified due to how battlesnake.com works, namely battling against multiple opponents at once and everyone moving simultaneously each turn.</p>
+    <p>Billy's brain computes how everyone moves and looks at the worst case scenario. He will try to win by attempting multiple random games for each possible move.</p>
+
+    <h2>Get started with billy</h2>
+    <ol>
+        <li> Simply run this webapp (which you've done if you see this text)</li>
+        <li>Login to this webapp (custom accounts can be made in the LoginManager class, or use the account: 'Vvamp', with password 'admin').</li>
+        <li><b>Optional:</b> If you're on a local machine, make sure to <a target="_blank" href="https://nl.wikihow.com/Port-Forwarding-instellen-op-een-router" title="How do I port forward?">port forward port 8080</a> and use <a target="_blank" href="https://ipchicken.com" title="What is my external ip?">your external ip</a> as the website url mentioned below.</li>
+        <li>Go to <a href="https://play.battlesnake.com" title="Battlesnake" target="_blank">play.battlesnake.com</a></li>
+        <li>Create a new battlesnake. Give it a name and set the server url to {whatever is in your webbrowser}/api/snakes/{your username}. For instance, when running on azure it could be 'https://eindopdracht-1718758585350.azurewebsites.net/api/snakes/Vvamp'</li>
+        <li>Enjoy!</li>
+    </ol>
 
 </main>
 

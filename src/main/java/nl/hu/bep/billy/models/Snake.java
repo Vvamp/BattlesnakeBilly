@@ -57,7 +57,7 @@ public class Snake {
     }
 
     public Move play(GameRequest gameRequest) {
-        if (gameRequest.board.snakes.size() > 5) {
+        if (gameRequest.board.snakes.size() > Integer.MAX_VALUE) { // set to a normal number to use random algorithm if the mcts would get too inefficient with multiple agents
             brain = new RandomAlgorithm();
         } else {
             brain = new MctsAlgorithm();
