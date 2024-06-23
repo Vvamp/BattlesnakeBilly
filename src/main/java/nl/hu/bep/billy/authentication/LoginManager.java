@@ -7,15 +7,22 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
 import java.security.Key;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.*;
 
 public class LoginManager {
+    private final Clock clock;
     // map with username, user
     private static Map<String, User> users;
     private static List<String> validatedTokens;
     private static Key key;
 
     public LoginManager() {
+        this(Clock.systemDefaultZone());
+    }
+
+    public LoginManager(Clock clock) {
         if (users == null) {
             users = new HashMap<>();
             users.put("Vvamp", new User("Vvamp", "admin", "user"));
@@ -27,6 +34,15 @@ public class LoginManager {
         if (key == null) {
             key = MacProvider.generateKey();
         }
+        this.clock = clock;
+    }
+
+
+        public void addUser(User user) {
+        if (users.containsKey(user.getName())) {
+            throw new IllegalArgumentException("User with name " + user.getName() + " already exists");
+        }
+        users.put(user.getName(), user);
 
     }
 
@@ -43,10 +59,12 @@ public class LoginManager {
     }
 
     public String createToken(String username, String role) {
-        Calendar expiration = Calendar.getInstance();
-        expiration.add(Calendar.MINUTE, 30);
+//        Calendar expiration = Calendar.getInstance();
+//        expiration.add(Calendar.MINUTE, 30);
+        Instant now = clock.instant();
+        Instant expiration = now.plusSeconds(30*60);
 
-        return Jwts.builder().setSubject(username).setExpiration(expiration.getTime()).claim("role", role).setIssuedAt(Calendar.getInstance().getTime()).signWith(SignatureAlgorithm.HS256, key).compact();
+        return Jwts.builder().setSubject(username).setExpiration(Date.from(expiration)).claim("role", role).setIssuedAt(Date.from(now)).signWith(SignatureAlgorithm.HS256, key).compact();
     }
 
     public void validateToken(String token) {
@@ -70,9 +88,10 @@ public class LoginManager {
                 return new ValidationResult(ValidationStatus.INVALID, "The token was not found in the user's token list.");
         }
 
-        Calendar calendar = Calendar.getInstance();
-        if (claims.getExpiration().before(calendar.getTime())) {
-            return new ValidationResult(ValidationStatus.EXPIRED, String.format("The token has expired. ( %s < %s )", claims.getExpiration().toString(), calendar.getTime()));
+        Instant now = clock.instant();
+
+        if (claims.getExpiration().before(Date.from(now))) {
+            return new ValidationResult(ValidationStatus.EXPIRED, String.format("The token has expired. ( %s < %s )", claims.getExpiration().toString(), Date.from(now).getTime()));
         }
 
         return new ValidationResult(ValidationStatus.VALID, "No issues with the token were found.", user);
