@@ -12,7 +12,8 @@ function update() {
     return service.updateSnake({
         color: form.color.value,
         head: form.head.value,
-        tail: form.tail.value
+        tail: form.tail.value,
+        mctstime: form.mctstime.value
     }).then(() => {
         updateBtn.disabled = true;
     })
@@ -33,6 +34,7 @@ function refresh(snakeDTO) {
     form.color.value = snakeDTO.color;
     form.head.value = snakeDTO.head;
     form.tail.value = snakeDTO.tail;
+    form.mctstime.value = snakeDTO.mctstime;
 }
 
 

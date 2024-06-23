@@ -57,7 +57,7 @@ public class SnakeResource {
         }
 
         Snake snake = currentUser.getSnake();
-        snake.update(snakePatchRequest.color, snakePatchRequest.head, snakePatchRequest.tail);
+        snake.update(snakePatchRequest.color, snakePatchRequest.head, snakePatchRequest.tail, snakePatchRequest.mctstime);
         return Response.status(Response.Status.OK).entity(snake).build();
 
     }

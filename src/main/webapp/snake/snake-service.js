@@ -36,7 +36,8 @@ export default class SnakeService {
                 color: snake.color,
                 head: snake.head,
                 tail: snake.tail,
-                version: snake.version
+                version: snake.version,
+                mctstime: snake.mctsCalculationTime
             })
         });
     }

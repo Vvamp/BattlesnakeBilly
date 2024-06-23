@@ -1,5 +1,6 @@
 package nl.hu.bep.billy.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.hu.bep.billy.ApiModels.GameRequest;
 import nl.hu.bep.billy.Customizations;
 import nl.hu.bep.billy.algorithms.IAlgorithm;
@@ -21,31 +22,30 @@ public class Snake {
     private String color;
     private String tail;
     private String head;
-    private boolean isDirty=false;
+    private boolean isDirty = false;
+    @JsonProperty
+    private int mctsCalculationTime = 250;
 
-    public boolean getIsDirty(){
-        return isDirty;
-    }
     public Snake() {
         this.id = counter++;
         this.color = "#0000ff";
         this.head = Customizations.getRandomHead();
         this.tail = Customizations.getRandomTail();
-        this.brain = new MctsAlgorithm();
+        this.brain = new MctsAlgorithm(mctsCalculationTime);
     }
 
     public void endBattle(GameRequest request) {
-        isDirty=true;
+        isDirty = true;
         registerTurn(request, true);
     }
 
     public void addBattle(Battle battle) {
-        isDirty=true;
+        isDirty = true;
         this.battles.add(battle);
     }
 
     public void updateBattle(Battle battle) {
-        isDirty=true;
+        isDirty = true;
         for (int battleIndex = 0; battleIndex < battles.size(); battleIndex++) {
             Battle currentBattle = battles.get(battleIndex);
             if (currentBattle.getId().equals(battle.getId())) {
@@ -60,7 +60,7 @@ public class Snake {
         if (gameRequest.board.snakes.size() > Integer.MAX_VALUE) { // set to a normal number to use random algorithm if the mcts would get too inefficient with multiple agents
             brain = new RandomAlgorithm();
         } else {
-            brain = new MctsAlgorithm();
+            brain = new MctsAlgorithm(mctsCalculationTime);
         }
         gameRequest.setAlgorithm(brain.getName());
 
@@ -72,7 +72,7 @@ public class Snake {
     }
 
     public void registerTurn(GameRequest gameRequest, boolean lastTurn) {
-        isDirty=true;
+        isDirty = true;
         String gameId = gameRequest.game.id;
         for (Battle currentBattle : battles) {
             if (currentBattle.getId().equals(gameId)) {
@@ -87,7 +87,7 @@ public class Snake {
     }
 
     public void deleteBattle(String gameId) {
-        isDirty=true;
+        isDirty = true;
         Battle battleFound = null;
         for (Battle currentBattle : battles) {
             if (currentBattle.getId().equals(gameId)) {
@@ -101,7 +101,7 @@ public class Snake {
 
     }
 
-    public void update(String color, String head, String tail) {
+    public void update(String color, String head, String tail, int mctstime) {
         if (!color.isEmpty()) {
             this.color = color;
         }
@@ -111,7 +111,22 @@ public class Snake {
         if (!tail.isEmpty() && Customizations.isValidTail(tail)) {
             this.tail = tail;
         }
-        isDirty=true;
+        if(mctstime > 0) {
+            mctsCalculationTime = mctstime;
+        }
+        isDirty = true;
+    }
+
+    public int getMctsCalculationTime() {
+        return mctsCalculationTime;
+    }
+
+    public void setMctsCalculationTime(int mctsCalculationTime) {
+        this.mctsCalculationTime = mctsCalculationTime;
+    }
+
+    public boolean getIsDirty() {
+        return isDirty;
     }
 
     public List<Battle> getBattles() {
@@ -127,7 +142,7 @@ public class Snake {
             return;
         }
         this.tail = tail;
-        isDirty=true;
+        isDirty = true;
 
     }
 
@@ -140,7 +155,7 @@ public class Snake {
             return;
         }
         this.head = head;
-        isDirty=true;
+        isDirty = true;
 
     }
 
@@ -154,7 +169,7 @@ public class Snake {
 
     public void setColor(String color) {
         this.color = color;
-        isDirty=true;
+        isDirty = true;
 
     }
 

@@ -13,7 +13,10 @@ import java.util.stream.Collectors;
 public class MctsAlgorithm implements IAlgorithm {
 
     private static Move lastMove = Move.NONE;
-
+    private int movementTime;
+    public MctsAlgorithm(int move_time){
+        movementTime = move_time;
+    }
     @Override
     public String getName(){
         return "MCTS";
@@ -43,7 +46,7 @@ public class MctsAlgorithm implements IAlgorithm {
         // loop until time (almost) up
         long c = 0;
         Instant instant = Instant.now();
-        while (Instant.now().isBefore(instant.plusMillis(250))) { // we have at max 500ms. PC: 450ms limit. Azure: 250ms due to slownesss
+        while (Instant.now().isBefore(instant.plusMillis(movementTime))) { // we have at max 500ms. PC: 450ms limit. Azure: 250ms due to slownesss
             Node leafWithPossibleMoves = tree.findSpotToExpand(root, invertedLastMove); // find an unexplored move and return it as node
             Node newLeaf = tree.expand(leafWithPossibleMoves); // create a node for unexplored move
             double gameResult = tree.rollout(newLeaf); // Play the game until end

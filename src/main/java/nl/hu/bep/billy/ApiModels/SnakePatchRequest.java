@@ -4,4 +4,5 @@ public class SnakePatchRequest {
     public String color;
     public String head;
     public String tail;
+    public int mctstime;
 }
