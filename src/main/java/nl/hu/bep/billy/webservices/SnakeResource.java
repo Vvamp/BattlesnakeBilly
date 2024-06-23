@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.cert.CertificateRevokedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,20 +39,6 @@ public class SnakeResource {
         return Response.status(Response.Status.OK).entity(snake).build();
     }
 
-    @GET
-    @Path("/customizations")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCustomizations() {
-        String[] heads = Customizations.getHeads();
-        String[] tails = Customizations.getTails();
-
-        Map<String, String[]> out = new HashMap<>();
-        out.put("heads", heads);
-        out.put("tails", tails);
-
-        return Response.status(Response.Status.OK).entity(out).build();
-    }
-
     @PUT
     @RolesAllowed("user")
     @Path("{user}")
@@ -67,8 +52,9 @@ public class SnakeResource {
         }
 
         User passedUser = User.getUserByName(user);
-        if (!(passedUser.getName().equals(currentUser.getName()))){
-            return Response.status(Response.Status.FORBIDDEN).build();}
+        if (!(passedUser.getName().equals(currentUser.getName()))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
 
         Snake snake = currentUser.getSnake();
         snake.update(snakePatchRequest.color, snakePatchRequest.head, snakePatchRequest.tail);
@@ -90,7 +76,7 @@ public class SnakeResource {
         Map<String, String> messages = new HashMap<>();
         messages.put("shout", "GLHF :)");
         snake.addBattle(new Battle(request));
-        System.out.println("[Billy] Starting new battle with id " + request.game.id);
+//        System.out.println("[Billy] Starting new battle with id " + request.game.id);
         return Response.status(Response.Status.OK).entity(messages).build();
     }
 
@@ -103,38 +89,36 @@ public class SnakeResource {
         if (currentUser == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        logRequestToFile(user, request);
 
         Snake snake = currentUser.getSnake();
         snake.registerTurn(request);
 //        System.out.println("[Billy] Server asking for my move (turn " + request.turn + ")");
         Move move = snake.play(request);
-        System.out.println("[Billy] I want to play " + move.toString());
+//        System.out.println("[Billy] I want to play " + move.toString());
 
         Map<String, String> messages = new HashMap<>();
         messages.put("move", move.toString().toLowerCase());
-//        messages.put("move", "right");
-        messages.put("shout", "no shouts right now");
+
+        switch (move) {
+            case LEFT:
+                messages.put("shout", "Left it is, my precious!");
+                break;
+            case RIGHT:
+                messages.put("shout", "Always take the right path");
+                break;
+            case UP:
+                messages.put("shout", "Beam me up, Scotty!");
+                break;
+            case DOWN:
+                messages.put("shout", "Let's take it down a notch...");
+                break;
+            default:
+                messages.put("shout", "I am so confused right now");
+
+        }
 
 
         return Response.status(Response.Status.OK).entity(messages).build();
-    }
-
-    private void logRequestToFile(String user, GameRequest request) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            // Serialize the request object to JSON
-            String jsonRequest = objectMapper.writeValueAsString(request);
-
-            // Create or append to the log file
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("/home/vvamp/game_requests.log", true))) {
-                writer.write("User: " + user + "\n");
-                writer.write("Request: " + jsonRequest + "\n");
-                writer.write("=====================================\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @POST
@@ -150,9 +134,23 @@ public class SnakeResource {
         Map<String, String> messages = new HashMap<>();
         messages.put("shout", "OK. GG");
         snake.endBattle(request);
-        System.out.println("[Billy] Done playing game " + request.game.id + "!");
+//        System.out.println("[Billy] Done playing game " + request.game.id + "!");
 
         return Response.status(Response.Status.OK).entity(messages).build();
+    }
+
+    @GET
+    @Path("/customizations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCustomizations() {
+        String[] heads = Customizations.getHeads();
+        String[] tails = Customizations.getTails();
+
+        Map<String, String[]> out = new HashMap<>();
+        out.put("heads", heads);
+        out.put("tails", tails);
+
+        return Response.status(Response.Status.OK).entity(out).build();
     }
 
     @GET

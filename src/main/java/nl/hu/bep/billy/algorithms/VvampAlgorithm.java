@@ -107,7 +107,7 @@ public class VvampAlgorithm implements IAlgorithm {
 
         if (bestMoves.isEmpty()) {
             RandomAlgorithm ra = new RandomAlgorithm();
-            System.out.println("Random move cuz no good moves");
+//            System.out.println("Random move cuz no good moves");
             return ra.findBestMove(turn);
         }
         bestMove = bestMoves.get(0);

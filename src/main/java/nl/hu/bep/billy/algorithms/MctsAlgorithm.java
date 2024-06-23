@@ -51,12 +51,12 @@ public class MctsAlgorithm implements IAlgorithm {
             c += 1;
         }
 
-        System.out.println("[Brain] Move took " + ((Instant.now().minusNanos(instant.getNano())).getNano() / 1000000) + " ms and " + c + " games were checked");
+//        System.out.println("[Brain] Move took " + ((Instant.now().minusNanos(instant.getNano())).getNano() / 1000000) + " ms and " + c + " games were checked");
         List<Node> childrenToRemove = root.getChildren().stream().filter(child -> child.getMoves().get(root.getGamestate().getPlayer()) == invertedLastMove).collect(Collectors.toList());
         root.getChildren().removeAll(childrenToRemove);
         var bestChild = root.findBestChild();
         Move bestMove = bestChild.getMoves().get(root.getGamestate().getPlayer()); // get best move for player :)
-        System.out.println("[Brain] Best Move: " + bestMove.toString() + " with score: " + bestChild.getValue() + " and visits " + bestChild.getVisits());
+//        System.out.println("[Brain] Best Move: " + bestMove.toString() + " with score: " + bestChild.getValue() + " and visits " + bestChild.getVisits());
 
         lastMove = bestMove;
         return bestMove;
