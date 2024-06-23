@@ -53,10 +53,12 @@ public class Tree {
 
     private List<Battlesnake> getPlayers(GameState gameState) {
         Battlesnake me = gameState.getPlayer();
-        Battlesnake other = gameState.getOpponent(); // there is only 1 when using this algo
+        List<Battlesnake> others = gameState.getOpponents(); // there is only 1 when using this algo
         List<Battlesnake> players = new ArrayList<>();
         players.add(me);
-        if (other != null) players.add(other);
+        for(Battlesnake other : others) {
+            players.add(other);
+        }
 
         return players;
     }

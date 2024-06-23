@@ -7,6 +7,7 @@ import nl.hu.bep.billy.algorithms.Move;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameState {
     private final GameRequest gamerequest;
@@ -150,8 +151,8 @@ public class GameState {
         return getGamerequest().you;
     }
 
-    public Battlesnake getOpponent() {
-        return getGamerequest().board.snakes.stream().filter(s -> !s.id.equals(getPlayer().id)).findFirst().orElse(null);
+    public List<Battlesnake> getOpponents() {
+        return getGamerequest().board.snakes.stream().filter(s -> !s.id.equals(getPlayer().id)).collect(Collectors.toList());
     }
 
     public GameRequest getGamerequest() {

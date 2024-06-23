@@ -2,6 +2,7 @@ package nl.hu.bep.billy.algorithms.mcts;
 
 import nl.hu.bep.billy.ApiModels.Battlesnake;
 import nl.hu.bep.billy.algorithms.Move;
+import nl.hu.bep.billy.models.Battle;
 
 import java.util.*;
 
@@ -56,8 +57,8 @@ public class Node {
         List<Map<Battlesnake, Move>> combinations = new ArrayList<>();
         Battlesnake me = gamestate.getPlayer();
         List<Move> myMoves = gamestate.getLegalMoves(me);
-        Battlesnake opponent = gamestate.getOpponent();
-        if (opponent == null) {
+        List<Battlesnake> opponents = gamestate.getOpponents();
+        if (opponents.size() == 0) {
             for (Move myMove : myMoves) {
                 Map<Battlesnake, Move> moveRound = new HashMap();
                 moveRound.put(me, myMove);
@@ -65,14 +66,17 @@ public class Node {
             }
             return combinations;
         }
-        List<Move> theirMoves = gamestate.getLegalMoves(opponent);
-        for (Move myMove : myMoves) {
-            Map<Battlesnake, Move> moveRound = new HashMap();
-            for (Move theirMove : theirMoves) {
-                moveRound.put(me, myMove);
-                moveRound.put(opponent, theirMove);
+
+        for(Battlesnake opponent : opponents) {
+            List<Move> theirMoves = gamestate.getLegalMoves(opponent);
+            for (Move myMove : myMoves) {
+                Map<Battlesnake, Move> moveRound = new HashMap();
+                for (Move theirMove : theirMoves) {
+                    moveRound.put(me, myMove);
+                    moveRound.put(opponent, theirMove);
+                }
+                combinations.add(moveRound);
             }
-            combinations.add(moveRound);
         }
         return combinations;
     }

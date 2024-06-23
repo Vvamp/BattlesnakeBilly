@@ -49,11 +49,9 @@ public class Snake {
     }
 
     public Move play(GameRequest gameRequest) {
-        if (gameRequest.board.snakes.size() > 2) {
-//            System.out.println("[Brain] set to random (>2)");
+        if (gameRequest.board.snakes.size() > 5) {
             brain = new RandomAlgorithm();
         } else {
-//            System.out.println("[Brain] set to mcts (<=2)");
             brain = new MctsAlgorithm();
         }
         gameRequest.setAlgorithm(brain.getName());
