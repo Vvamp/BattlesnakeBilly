@@ -1,5 +1,8 @@
 package nl.hu.bep.billy.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.hu.bep.billy.ApiModels.Battlesnake;
 import nl.hu.bep.billy.ApiModels.GameRequest;
 import nl.hu.bep.billy.ApiModels.Ruleset;
@@ -8,16 +11,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Battle {
+    @JsonProperty
     private final String id;
+    @JsonProperty
     private final List<Battlesnake> otherBattlesnakes;
+    @JsonProperty
     private final List<GameRequest> turns;
+    @JsonProperty
     private final Ruleset ruleset;
+    @JsonProperty
     private Battlesnake myBattlesnake;
-    private boolean isInProgress;
+    @JsonProperty
+    private boolean inProgress;
 
 
     public Battle(GameRequest gameRequest) {
@@ -27,15 +34,18 @@ public class Battle {
         this.turns = new ArrayList<>();
         this.turns.add(gameRequest);
         this.ruleset = gameRequest.game.ruleset;
-        this.isInProgress = true;
+        this.inProgress = true;
     }
-//    public Battle(String id, Battlesnake myBattlesnake, List<Battlesnake> otherBattlesnakes, List<GameRequest> turns, Ruleset ruleset){
-//        this.id = id;
-//        this.myBattlesnake = myBattlesnake;
-//        this.otherBattlesnakes = otherBattlesnakes;
-//        this.turns = turns;
-//        this.ruleset = ruleset;
-//    }
+
+    @JsonCreator
+    public Battle(@JsonProperty("id") String id, @JsonProperty("myBattlesnake") Battlesnake myBattlesnake, @JsonProperty("otherBattlesnakes") List<Battlesnake> otherBattlesnakes, @JsonProperty("turns") List<GameRequest> turns, @JsonProperty("ruleset") Ruleset ruleset, @JsonProperty("inProgress") boolean inProgress){
+        this.id = id;
+        this.myBattlesnake = myBattlesnake;
+        this.otherBattlesnakes = otherBattlesnakes;
+        this.turns = turns;
+        this.ruleset = ruleset;
+        this.inProgress = inProgress;
+    }
 
     public void addTurn(GameRequest turn) {
         this.setMyBattlesnake(turn.you);
@@ -43,10 +53,11 @@ public class Battle {
     }
 
     public void end() {
-        this.isInProgress = false;
+        this.inProgress = false;
         // calc end condition and stats
     }
 
+    @JsonIgnore
     public String getMostUsedAlgorithm() {
         Map<String, Integer> algorithmsByCount = new HashMap<>();
         for(GameRequest turn : turns){
@@ -78,17 +89,18 @@ public class Battle {
         return id;
     }
 
-
+    @JsonIgnore
     public boolean isInProgress() {
-        return isInProgress;
+        return inProgress;
     }
 
+    @JsonIgnore
     public String getPlayerId() {
         return myBattlesnake.id;
     }
-
+    @JsonIgnore
     public String getResult() {
-        if (this.isInProgress) {
+        if (this.inProgress) {
             return "game still playing";
         }
         GameRequest lastRequest = turns.get(turns.size() - 1);
@@ -103,6 +115,7 @@ public class Battle {
         }
     }
 
+    @JsonIgnore
     public int getTurnCount() {
         return turns.size();
     }
@@ -123,6 +136,7 @@ public class Battle {
     public List<GameRequest> getTurns() {
         return turns;
     }
+
 
     public Ruleset getRuleset() {
         return ruleset;

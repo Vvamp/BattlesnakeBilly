@@ -21,7 +21,11 @@ public class Snake {
     private String color;
     private String tail;
     private String head;
+    private boolean isDirty=false;
 
+    public boolean getIsDirty(){
+        return isDirty;
+    }
     public Snake() {
         this.id = counter++;
         this.color = "#0000ff";
@@ -31,14 +35,17 @@ public class Snake {
     }
 
     public void endBattle(GameRequest request) {
+        isDirty=true;
         registerTurn(request, true);
     }
 
     public void addBattle(Battle battle) {
+        isDirty=true;
         this.battles.add(battle);
     }
 
     public void updateBattle(Battle battle) {
+        isDirty=true;
         for (int battleIndex = 0; battleIndex < battles.size(); battleIndex++) {
             Battle currentBattle = battles.get(battleIndex);
             if (currentBattle.getId().equals(battle.getId())) {
@@ -46,6 +53,7 @@ public class Snake {
                 return;
             }
         }
+
     }
 
     public Move play(GameRequest gameRequest) {
@@ -64,6 +72,7 @@ public class Snake {
     }
 
     public void registerTurn(GameRequest gameRequest, boolean lastTurn) {
+        isDirty=true;
         String gameId = gameRequest.game.id;
         for (Battle currentBattle : battles) {
             if (currentBattle.getId().equals(gameId)) {
@@ -74,9 +83,11 @@ public class Snake {
                 return;
             }
         }
+
     }
 
     public void deleteBattle(String gameId) {
+        isDirty=true;
         Battle battleFound = null;
         for (Battle currentBattle : battles) {
             if (currentBattle.getId().equals(gameId)) {
@@ -87,6 +98,7 @@ public class Snake {
         if (battleFound != null) {
             battles.remove(battleFound);
         }
+
     }
 
     public void update(String color, String head, String tail) {
@@ -99,6 +111,7 @@ public class Snake {
         if (!tail.isEmpty() && Customizations.isValidTail(tail)) {
             this.tail = tail;
         }
+        isDirty=true;
     }
 
     public List<Battle> getBattles() {
@@ -114,6 +127,8 @@ public class Snake {
             return;
         }
         this.tail = tail;
+        isDirty=true;
+
     }
 
     public String getHead() {
@@ -125,6 +140,8 @@ public class Snake {
             return;
         }
         this.head = head;
+        isDirty=true;
+
     }
 
     public int getId() {
@@ -137,6 +154,8 @@ public class Snake {
 
     public void setColor(String color) {
         this.color = color;
+        isDirty=true;
+
     }
 
     public String getAuthor() {

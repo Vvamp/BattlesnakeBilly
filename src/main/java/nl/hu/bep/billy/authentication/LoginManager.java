@@ -12,11 +12,11 @@ import java.time.Instant;
 import java.util.*;
 
 public class LoginManager {
-    private final Clock clock;
     // map with username, user
     private static Map<String, User> users;
     private static List<String> validatedTokens;
     private static Key key;
+    private final Clock clock;
 
     public LoginManager() {
         this(Clock.systemDefaultZone());
@@ -25,8 +25,6 @@ public class LoginManager {
     public LoginManager(Clock clock) {
         if (users == null) {
             users = new HashMap<>();
-            users.put("Vvamp", new User("Vvamp", "admin", "user"));
-            users.put("NietVvamp", new User("NietVvamp", "anders", "user"));
         }
         if (validatedTokens == null) {
             validatedTokens = new ArrayList<>();
@@ -37,8 +35,15 @@ public class LoginManager {
         this.clock = clock;
     }
 
+    public void populate() {
+        users = new HashMap<>();
+        users.put("Vvamp", new User("Vvamp", "admin", "user"));
+        users.put("NietVvamp", new User("NietVvamp", "anders", "user"));
+        
+    }
 
-        public void addUser(User user) {
+
+    public void addUser(User user) {
         if (users.containsKey(user.getName())) {
             throw new IllegalArgumentException("User with name " + user.getName() + " already exists");
         }
@@ -62,7 +67,7 @@ public class LoginManager {
 //        Calendar expiration = Calendar.getInstance();
 //        expiration.add(Calendar.MINUTE, 30);
         Instant now = clock.instant();
-        Instant expiration = now.plusSeconds(30*60);
+        Instant expiration = now.plusSeconds(30 * 60);
 
         return Jwts.builder().setSubject(username).setExpiration(Date.from(expiration)).claim("role", role).setIssuedAt(Date.from(now)).signWith(SignatureAlgorithm.HS256, key).compact();
     }
@@ -102,5 +107,9 @@ public class LoginManager {
             validatedTokens.remove(token);
         } catch (Exception e) {
         }
+    }
+
+    public List<User> getUsers() {
+        return users.values().stream().toList();
     }
 }
