@@ -29,4 +29,12 @@ public class Customizations {
         return tails[random.nextInt(tails.length)];
     }
 
+    public static String[] getHeads(){
+        return heads;
+    }
+
+    public static String[] getTails(){
+        return tails;
+    }
+
 }

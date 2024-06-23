@@ -48,3 +48,16 @@ service.getSnake().then(currentValues => {
         input.disabled = false;
     }
 });
+
+service.getSnakeOptions().then(customizationOptions => {
+    let headList = document.querySelector("#head-selector");
+    let tailList = document.querySelector("#tail-selector");
+    customizationOptions.heads.forEach(elem => {
+        let newHeadOption = new Option(elem, elem);
+        headList.add(newHeadOption);
+    });
+
+    customizationOptions.tails.forEach(elem => {
+        let newTailOption = new Option(elem, elem);
+        tailList.add(newTailOption);    });
+});

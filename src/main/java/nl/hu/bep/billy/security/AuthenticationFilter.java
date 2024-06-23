@@ -28,10 +28,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             ValidationResult tokenResult = loginManager.checkTokenValidity(token);
             if (tokenResult.getStatus() == ValidationStatus.VALID) {
-                System.out.println("Proceeding as user");
                 msc = new MySecurityContext(tokenResult.getUser(), scheme);
-            } else {// return guest
-                System.out.println("Proceeding as quest");
             }
 
         }

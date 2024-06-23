@@ -3,6 +3,7 @@ package nl.hu.bep.billy.webservices;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hu.bep.billy.ApiModels.GameRequest;
 import nl.hu.bep.billy.ApiModels.SnakePatchRequest;
+import nl.hu.bep.billy.Customizations;
 import nl.hu.bep.billy.algorithms.Move;
 import nl.hu.bep.billy.authentication.User;
 import nl.hu.bep.billy.models.Battle;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.cert.CertificateRevokedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +40,20 @@ public class SnakeResource {
         return Response.status(Response.Status.OK).entity(snake).build();
     }
 
+    @GET
+    @Path("/customizations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCustomizations() {
+        String[] heads = Customizations.getHeads();
+        String[] tails = Customizations.getTails();
+
+        Map<String, String[]> out = new HashMap<>();
+        out.put("heads", heads);
+        out.put("tails", tails);
+
+        return Response.status(Response.Status.OK).entity(out).build();
+    }
+
     @PUT
     @RolesAllowed("user")
     @Path("{user}")
@@ -46,11 +62,13 @@ public class SnakeResource {
     public Response updateSnake(@Context ContainerRequestContext requestCtx, @PathParam("user") String user, SnakePatchRequest snakePatchRequest) {
         MySecurityContext sc = (MySecurityContext) requestCtx.getSecurityContext(); // simply passing MySecurityContext as param didn't work(it was null)
         if (sc == null) return Response.status(Response.Status.BAD_REQUEST).build();
-        if (!(sc.getUserPrincipal() instanceof User currentUser))
+        if (!(sc.getUserPrincipal() instanceof User currentUser)) {
             return Response.status(Response.Status.FORBIDDEN).build();
+        }
 
         User passedUser = User.getUserByName(user);
-        if (passedUser != currentUser) return Response.status(Response.Status.FORBIDDEN).build();
+        if (!(passedUser.getName().equals(currentUser.getName()))){
+            return Response.status(Response.Status.FORBIDDEN).build();}
 
         Snake snake = currentUser.getSnake();
         snake.update(snakePatchRequest.color, snakePatchRequest.head, snakePatchRequest.tail);

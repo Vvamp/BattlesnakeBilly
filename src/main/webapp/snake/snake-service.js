@@ -1,4 +1,20 @@
 export default class SnakeService {
+
+    async getSnakeOptions(){
+        return fetch("/api/snakes/customizations", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(function(response){
+            if(response.ok){
+                return response.json();
+            }
+        }).then(function(customizations){
+            return Promise.resolve(customizations)
+        });
+    }
+
     async getSnake() {
 
         let username = window.sessionStorage.getItem("user");
